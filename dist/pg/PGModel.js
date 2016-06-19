@@ -56,7 +56,7 @@ var PGModel = function () {
                                 query = (0, _stripAdditionalWhitespaces2.default)('select * from ' + this.tableName + ' where ' + column + ' = $1');
                                 _context.prev = 1;
                                 _context.next = 4;
-                                return _db2.default.oneOrNone(query, value);
+                                return (0, _db2.default)().oneOrNone(query, value);
 
                             case 4:
                                 return _context.abrupt('return', _context.sent);
@@ -102,7 +102,7 @@ var PGModel = function () {
                                     return '$/' + column + '/';
                                 }) + '\n                )');
                                 _context2.next = 5;
-                                return _db2.default.none(query, item);
+                                return (0, _db2.default)().none(query, item);
 
                             case 5:
                                 return _context2.abrupt('return', _context2.sent);
@@ -142,7 +142,7 @@ var PGModel = function () {
                                 query = (0, _stripAdditionalWhitespaces2.default)('update ' + this.tableName + ' set ' + column + ' = ' + value + ' where ' + where.column + ' = $1');
                                 _context3.prev = 1;
                                 _context3.next = 4;
-                                return _db2.default.oneOrNone(query, where.value);
+                                return (0, _db2.default)().oneOrNone(query, where.value);
 
                             case 4:
                                 return _context3.abrupt('return', _context3.sent);
@@ -185,7 +185,7 @@ var PGModel = function () {
                                 query = 'delete from ' + this.tableName + ' where ' + column + ' = $1';
                                 _context4.prev = 1;
                                 _context4.next = 4;
-                                return _db2.default.none(query, value);
+                                return (0, _db2.default)().none(query, value);
 
                             case 4:
                                 return _context4.abrupt('return', _context4.sent);
@@ -232,11 +232,11 @@ var PGModel = function () {
 
                                 createQuery = (0, _stripAdditionalWhitespaces2.default)('create table ' + this.tableName + ' (\n                ' + this.columns.map(createColumn) + '\n            )');
                                 _context5.next = 5;
-                                return _db2.default.none(dropQuery);
+                                return (0, _db2.default)().none(dropQuery);
 
                             case 5:
                                 _context5.next = 7;
-                                return _db2.default.none(createQuery);
+                                return (0, _db2.default)().none(createQuery);
 
                             case 7:
                                 return _context5.abrupt('return', _context5.sent);
@@ -261,4 +261,3 @@ var PGModel = function () {
 }();
 
 exports.default = PGModel;
-;
