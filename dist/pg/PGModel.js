@@ -40,38 +40,54 @@ var PGModel = function () {
 
         this.tableName = cfg.tableName;
         this.columns = cfg.columns;
+        this.debug = cfg.debug;
     }
 
     _createClass(PGModel, [{
+        key: 'printQuery',
+        value: function printQuery() {
+            if (this.debug) {
+                [].concat(Array.prototype.slice.call(arguments)).forEach(function (arg) {
+                    return console.log(arg);
+                }); // eslint-disable-line no-console
+            }
+        }
+    }, {
         key: 'findOne',
         value: function () {
             var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(_ref) {
                 var column = _ref.column;
                 var value = _ref.value;
-                var query;
+                var query, parsedValue;
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 query = (0, _stripAdditionalWhitespaces2.default)(this.getFindQuery({ column: column, value: value }));
-                                _context.prev = 1;
-                                _context.next = 4;
-                                return (0, _db2.default)().oneOrNone(query, value.between ? undefined : value);
+                                parsedValue = value.between ? undefined : value;
 
-                            case 4:
+                                this.printQuery(query, value);
+
+                                _context.prev = 3;
+                                _context.next = 6;
+                                return (0, _db2.default)().oneOrNone(query, parsedValue);
+
+                            case 6:
                                 return _context.abrupt('return', _context.sent);
 
-                            case 7:
-                                _context.prev = 7;
-                                _context.t0 = _context['catch'](1);
+                            case 9:
+                                _context.prev = 9;
+                                _context.t0 = _context['catch'](3);
+
+                                console.log('Error finding one: ', _context.t0); // eslint-disable-line no-console
                                 throw _context.t0;
 
-                            case 10:
+                            case 13:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[1, 7]]);
+                }, _callee, this, [[3, 9]]);
             }));
 
             function findOne(_x) {
@@ -86,30 +102,36 @@ var PGModel = function () {
             var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref2) {
                 var column = _ref2.column;
                 var value = _ref2.value;
-                var query;
+                var query, parsedValue;
                 return regeneratorRuntime.wrap(function _callee2$(_context2) {
                     while (1) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
                                 query = (0, _stripAdditionalWhitespaces2.default)(this.getFindQuery({ column: column, value: value }));
-                                _context2.prev = 1;
-                                _context2.next = 4;
-                                return (0, _db2.default)().many(query, value.between ? undefined : value);
+                                parsedValue = value.between ? undefined : value;
 
-                            case 4:
+                                this.printQuery(query, value);
+
+                                _context2.prev = 3;
+                                _context2.next = 6;
+                                return (0, _db2.default)().many(query, value.between ? undefined : parsedValue);
+
+                            case 6:
                                 return _context2.abrupt('return', _context2.sent);
 
-                            case 7:
-                                _context2.prev = 7;
-                                _context2.t0 = _context2['catch'](1);
+                            case 9:
+                                _context2.prev = 9;
+                                _context2.t0 = _context2['catch'](3);
+
+                                console.log('Error finding all: ', _context2.t0); // eslint-disable-line no-console
                                 throw _context2.t0;
 
-                            case 10:
+                            case 13:
                             case 'end':
                                 return _context2.stop();
                         }
                     }
-                }, _callee2, this, [[1, 7]]);
+                }, _callee2, this, [[3, 9]]);
             }));
 
             function findAll(_x2) {
@@ -148,31 +170,36 @@ var PGModel = function () {
                     while (1) {
                         switch (_context3.prev = _context3.next) {
                             case 0:
-                                _context3.prev = 0;
                                 columns = Object.keys(item);
-                                query = (0, _stripAdditionalWhitespaces2.default)('insert into ' + this.tableName + ' (\n                    ' + columns.map(function (column) {
+                                query = (0, _stripAdditionalWhitespaces2.default)('insert into ' + this.tableName + ' (\n                ' + columns.map(function (column) {
                                     return column;
-                                }) + '\n                ) values (\n                    ' + columns.map(function (column) {
+                                }) + '\n            ) values (\n                ' + columns.map(function (column) {
                                     return '$/' + column + '/';
-                                }) + '\n                )');
-                                _context3.next = 5;
+                                }) + '\n            )');
+
+
+                                this.printQuery(query, item);
+
+                                _context3.prev = 3;
+                                _context3.next = 6;
                                 return (0, _db2.default)().none(query, item);
 
-                            case 5:
+                            case 6:
                                 return _context3.abrupt('return', _context3.sent);
 
-                            case 8:
-                                _context3.prev = 8;
-                                _context3.t0 = _context3['catch'](0);
+                            case 9:
+                                _context3.prev = 9;
+                                _context3.t0 = _context3['catch'](3);
 
                                 console.log('Error creating item for ' + this.tableName, _context3.t0); // eslint-disable-line no-console
+                                throw _context3.t0;
 
-                            case 11:
+                            case 13:
                             case 'end':
                                 return _context3.stop();
                         }
                     }
-                }, _callee3, this, [[0, 8]]);
+                }, _callee3, this, [[3, 9]]);
             }));
 
             function create(_x3) {
@@ -194,24 +221,28 @@ var PGModel = function () {
                         switch (_context4.prev = _context4.next) {
                             case 0:
                                 query = (0, _stripAdditionalWhitespaces2.default)('update ' + this.tableName + ' set ' + column + ' = ' + value + ' where ' + where.column + ' = $1');
-                                _context4.prev = 1;
-                                _context4.next = 4;
+
+
+                                this.printQuery(query, where.value);
+
+                                _context4.prev = 2;
+                                _context4.next = 5;
                                 return (0, _db2.default)().oneOrNone(query, where.value);
 
-                            case 4:
+                            case 5:
                                 return _context4.abrupt('return', _context4.sent);
 
-                            case 7:
-                                _context4.prev = 7;
-                                _context4.t0 = _context4['catch'](1);
+                            case 8:
+                                _context4.prev = 8;
+                                _context4.t0 = _context4['catch'](2);
                                 throw _context4.t0;
 
-                            case 10:
+                            case 11:
                             case 'end':
                                 return _context4.stop();
                         }
                     }
-                }, _callee4, this, [[1, 7]]);
+                }, _callee4, this, [[2, 8]]);
             }));
 
             function update(_x4) {
@@ -237,25 +268,30 @@ var PGModel = function () {
                         switch (_context5.prev = _context5.next) {
                             case 0:
                                 query = 'delete from ' + this.tableName + ' where ' + column + ' = $1';
-                                _context5.prev = 1;
-                                _context5.next = 4;
+
+
+                                this.printQuery(query, value);
+
+                                _context5.prev = 2;
+                                _context5.next = 5;
                                 return (0, _db2.default)().none(query, value);
 
-                            case 4:
+                            case 5:
                                 return _context5.abrupt('return', _context5.sent);
 
-                            case 7:
-                                _context5.prev = 7;
-                                _context5.t0 = _context5['catch'](1);
+                            case 8:
+                                _context5.prev = 8;
+                                _context5.t0 = _context5['catch'](2);
 
                                 console.log('Error deleting item for ' + this.tableName); // eslint-disable-line no-console
+                                throw _context5.t0;
 
-                            case 10:
+                            case 12:
                             case 'end':
                                 return _context5.stop();
                         }
                     }
-                }, _callee5, this, [[1, 7]]);
+                }, _callee5, this, [[2, 8]]);
             }));
 
             function remove(_x5) {
