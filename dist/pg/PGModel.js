@@ -66,7 +66,7 @@ var PGModel = function () {
                                 query = (0, _stripAdditionalWhitespaces2.default)(this.getFindQuery({ column: column, value: value }));
                                 parsedValue = this.getParameters(value);
 
-                                this.printQuery(query, value);
+                                this.printQuery(query, parsedValue);
 
                                 _context.prev = 3;
                                 _context.next = 6;
@@ -110,11 +110,11 @@ var PGModel = function () {
                                 query = (0, _stripAdditionalWhitespaces2.default)(this.getFindQuery({ column: column, value: value }));
                                 parsedValue = this.getParameters(value);
 
-                                this.printQuery(query, value);
+                                this.printQuery(query, parsedValue);
 
                                 _context2.prev = 3;
                                 _context2.next = 6;
-                                return (0, _db2.default)().many(query, value.between ? undefined : parsedValue);
+                                return (0, _db2.default)().many(query, parsedValue);
 
                             case 6:
                                 return _context2.abrupt('return', _context2.sent);
