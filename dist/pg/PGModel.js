@@ -64,7 +64,7 @@ var PGModel = function () {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 query = (0, _stripAdditionalWhitespaces2.default)(this.getFindQuery({ column: column, value: value }));
-                                parsedValue = value.between ? undefined : value;
+                                parsedValue = this.getParameters(value);
 
                                 this.printQuery(query, value);
 
@@ -108,7 +108,7 @@ var PGModel = function () {
                         switch (_context2.prev = _context2.next) {
                             case 0:
                                 query = (0, _stripAdditionalWhitespaces2.default)(this.getFindQuery({ column: column, value: value }));
-                                parsedValue = value.between ? undefined : value;
+                                parsedValue = this.getParameters(value);
 
                                 this.printQuery(query, value);
 
@@ -151,9 +151,18 @@ var PGModel = function () {
             var value = _ref3.value;
 
             if (value.between) {
-                return 'select * from ' + this.tableName + ' where ' + column + ' between "' + value.between.start + '" and "' + value.between.end + '"';
+                return 'select * from ' + this.tableName + ' where ' + column + ' between $1 and $2';
             } else {
                 return 'select * from ' + this.tableName + ' where ' + column + ' = $1';
+            }
+        }
+    }, {
+        key: 'getParameters',
+        value: function getParameters(value) {
+            if (value.between) {
+                return [value.between.start, value.between.end];
+            } else {
+                return value;
             }
         }
 

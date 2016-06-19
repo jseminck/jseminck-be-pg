@@ -46,7 +46,7 @@ describe("PGModel", function() {
         });
 
         it("finds records", function() {
-            expect(this.oneOrNone).to.have.been.calledWith(`select * from users where username between "a" and "Z"`, undefined);
+            expect(this.oneOrNone).to.have.been.calledWith(`select * from users where username between $1 and $2`, ["a", "Z"]);
         });
     });
 
@@ -66,7 +66,7 @@ describe("PGModel", function() {
         });
 
         it("finds records", function() {
-            expect(this.many).to.have.been.calledWith(`select * from users where username between "a" and "Z"`, undefined);
+            expect(this.many).to.have.been.calledWith(`select * from users where username between $1 and $2`, ["a", "Z"]);
         });
     });
 
