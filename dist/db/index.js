@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.default = db;
 
@@ -11,6 +11,7 @@ var _pgPromise2 = _interopRequireDefault(_pgPromise);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var dbConnection = void 0;
 /**
  * var cn = {
  *     host: 'localhost',
@@ -21,5 +22,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * };
  */
 function db(cn) {
-  return (0, _pgPromise2.default)()(process.env.DATABASE_URL || cn);
+    if (!dbConnection) {
+        dbConnection = (0, _pgPromise2.default)()(process.env.DATABASE_URL || cn);
+    }
+
+    return dbConnection;
 }
