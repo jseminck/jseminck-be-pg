@@ -1,19 +1,21 @@
 import proxyquire from 'proxyquire';
-import stripAdditionalWhitespaces from './../../../lib/pg/stripAdditionalWhitespaces';
+import stripAdditionalWhitespaces from './../../lib/pg/stripAdditionalWhitespaces';
 
 describe("PGModel", function() {
     beforeEach(function() {
         this.none = sinon.spy();
+        this.many = sinon.spy();
         this.oneOrNone = sinon.spy();
 
-        var PGModel = proxyquire('./../../../lib/pg/PGModel', {
-            '../db': {
-                default: {
+        var PGModel = proxyquire('./../../lib/pg/PGModel', {
+            './../db': {
+                default: () => ({
                     none: this.none,
+                    many: this.many,
                     oneOrNone: this.oneOrNone
-                }
+                })
             }
-        });
+        }).default;
 
         this.model = new PGModel({
             tableName: "users",
@@ -35,6 +37,36 @@ describe("PGModel", function() {
 
         it("finds records", function() {
             expect(this.oneOrNone).to.have.been.calledWith("select * from users where username = $1", "myUser");
+        });
+    });
+
+    describe("findOne() between", function() {
+        beforeEach(async function() {
+            await this.model.findOne({column: "username", value: {between: {start: "a", end: "Z"}}});
+        });
+
+        it("finds records", function() {
+            expect(this.oneOrNone).to.have.been.calledWith("select * from users where username between a and Z", undefined);
+        });
+    });
+
+    describe("findAll()", function() {
+        beforeEach(async function() {
+            await this.model.findAll({column: "username", value: "myUser"});
+        });
+
+        it("finds records", function() {
+            expect(this.many).to.have.been.calledWith("select * from users where username = $1", "myUser");
+        });
+    });
+
+    describe("findAll() between", function() {
+        beforeEach(async function() {
+            await this.model.findAll({column: "username", value: {between: {start: "a", end: "Z"}}});
+        });
+
+        it("finds records", function() {
+            expect(this.many).to.have.been.calledWith("select * from users where username between a and Z", undefined);
         });
     });
 

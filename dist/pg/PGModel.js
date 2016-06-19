@@ -53,10 +53,10 @@ var PGModel = function () {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                query = (0, _stripAdditionalWhitespaces2.default)('select * from ' + this.tableName + ' where ' + column + ' = $1');
+                                query = (0, _stripAdditionalWhitespaces2.default)(this.getFindQuery({ column: column, value: value }));
                                 _context.prev = 1;
                                 _context.next = 4;
-                                return (0, _db2.default)().oneOrNone(query, value);
+                                return (0, _db2.default)().oneOrNone(query, value.between ? undefined : value);
 
                             case 4:
                                 return _context.abrupt('return', _context.sent);
@@ -80,6 +80,60 @@ var PGModel = function () {
 
             return findOne;
         }()
+    }, {
+        key: 'findAll',
+        value: function () {
+            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref2) {
+                var column = _ref2.column;
+                var value = _ref2.value;
+                var query;
+                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                    while (1) {
+                        switch (_context2.prev = _context2.next) {
+                            case 0:
+                                query = (0, _stripAdditionalWhitespaces2.default)(this.getFindQuery({ column: column, value: value }));
+                                _context2.prev = 1;
+                                _context2.next = 4;
+                                return (0, _db2.default)().many(query, value.between ? undefined : value);
+
+                            case 4:
+                                return _context2.abrupt('return', _context2.sent);
+
+                            case 7:
+                                _context2.prev = 7;
+                                _context2.t0 = _context2['catch'](1);
+                                throw _context2.t0;
+
+                            case 10:
+                            case 'end':
+                                return _context2.stop();
+                        }
+                    }
+                }, _callee2, this, [[1, 7]]);
+            }));
+
+            function findAll(_x2) {
+                return ref.apply(this, arguments);
+            }
+
+            return findAll;
+        }()
+
+        // If the value contains a between object, then we create a search query
+        // that uses the between operator.
+
+    }, {
+        key: 'getFindQuery',
+        value: function getFindQuery(_ref3) {
+            var column = _ref3.column;
+            var value = _ref3.value;
+
+            if (value.between) {
+                return 'select * from ' + this.tableName + ' where ' + column + ' between ' + value.between.start + ' and ' + value.between.end;
+            } else {
+                return 'select * from ' + this.tableName + ' where ' + column + ' = $1';
+            }
+        }
 
         /**
          * Create a new item.
@@ -88,40 +142,40 @@ var PGModel = function () {
     }, {
         key: 'create',
         value: function () {
-            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(item) {
+            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(item) {
                 var columns, query;
-                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                return regeneratorRuntime.wrap(function _callee3$(_context3) {
                     while (1) {
-                        switch (_context2.prev = _context2.next) {
+                        switch (_context3.prev = _context3.next) {
                             case 0:
-                                _context2.prev = 0;
+                                _context3.prev = 0;
                                 columns = Object.keys(item);
                                 query = (0, _stripAdditionalWhitespaces2.default)('insert into ' + this.tableName + ' (\n                    ' + columns.map(function (column) {
                                     return column;
                                 }) + '\n                ) values (\n                    ' + columns.map(function (column) {
                                     return '$/' + column + '/';
                                 }) + '\n                )');
-                                _context2.next = 5;
+                                _context3.next = 5;
                                 return (0, _db2.default)().none(query, item);
 
                             case 5:
-                                return _context2.abrupt('return', _context2.sent);
+                                return _context3.abrupt('return', _context3.sent);
 
                             case 8:
-                                _context2.prev = 8;
-                                _context2.t0 = _context2['catch'](0);
+                                _context3.prev = 8;
+                                _context3.t0 = _context3['catch'](0);
 
-                                console.log('Error creating item for ' + this.tableName, _context2.t0); // eslint-disable-line no-console
+                                console.log('Error creating item for ' + this.tableName, _context3.t0); // eslint-disable-line no-console
 
                             case 11:
                             case 'end':
-                                return _context2.stop();
+                                return _context3.stop();
                         }
                     }
-                }, _callee2, this, [[0, 8]]);
+                }, _callee3, this, [[0, 8]]);
             }));
 
-            function create(_x2) {
+            function create(_x3) {
                 return ref.apply(this, arguments);
             }
 
@@ -130,37 +184,37 @@ var PGModel = function () {
     }, {
         key: 'update',
         value: function () {
-            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(_ref2) {
-                var column = _ref2.column;
-                var value = _ref2.value;
-                var where = _ref2.where;
+            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(_ref4) {
+                var column = _ref4.column;
+                var value = _ref4.value;
+                var where = _ref4.where;
                 var query;
-                return regeneratorRuntime.wrap(function _callee3$(_context3) {
+                return regeneratorRuntime.wrap(function _callee4$(_context4) {
                     while (1) {
-                        switch (_context3.prev = _context3.next) {
+                        switch (_context4.prev = _context4.next) {
                             case 0:
                                 query = (0, _stripAdditionalWhitespaces2.default)('update ' + this.tableName + ' set ' + column + ' = ' + value + ' where ' + where.column + ' = $1');
-                                _context3.prev = 1;
-                                _context3.next = 4;
+                                _context4.prev = 1;
+                                _context4.next = 4;
                                 return (0, _db2.default)().oneOrNone(query, where.value);
 
                             case 4:
-                                return _context3.abrupt('return', _context3.sent);
+                                return _context4.abrupt('return', _context4.sent);
 
                             case 7:
-                                _context3.prev = 7;
-                                _context3.t0 = _context3['catch'](1);
-                                throw _context3.t0;
+                                _context4.prev = 7;
+                                _context4.t0 = _context4['catch'](1);
+                                throw _context4.t0;
 
                             case 10:
                             case 'end':
-                                return _context3.stop();
+                                return _context4.stop();
                         }
                     }
-                }, _callee3, this, [[1, 7]]);
+                }, _callee4, this, [[1, 7]]);
             }));
 
-            function update(_x3) {
+            function update(_x4) {
                 return ref.apply(this, arguments);
             }
 
@@ -174,37 +228,37 @@ var PGModel = function () {
     }, {
         key: 'remove',
         value: function () {
-            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(_ref3) {
-                var column = _ref3.column;
-                var value = _ref3.value;
+            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(_ref5) {
+                var column = _ref5.column;
+                var value = _ref5.value;
                 var query;
-                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                return regeneratorRuntime.wrap(function _callee5$(_context5) {
                     while (1) {
-                        switch (_context4.prev = _context4.next) {
+                        switch (_context5.prev = _context5.next) {
                             case 0:
                                 query = 'delete from ' + this.tableName + ' where ' + column + ' = $1';
-                                _context4.prev = 1;
-                                _context4.next = 4;
+                                _context5.prev = 1;
+                                _context5.next = 4;
                                 return (0, _db2.default)().none(query, value);
 
                             case 4:
-                                return _context4.abrupt('return', _context4.sent);
+                                return _context5.abrupt('return', _context5.sent);
 
                             case 7:
-                                _context4.prev = 7;
-                                _context4.t0 = _context4['catch'](1);
+                                _context5.prev = 7;
+                                _context5.t0 = _context5['catch'](1);
 
                                 console.log('Error deleting item for ' + this.tableName); // eslint-disable-line no-console
 
                             case 10:
                             case 'end':
-                                return _context4.stop();
+                                return _context5.stop();
                         }
                     }
-                }, _callee4, this, [[1, 7]]);
+                }, _callee5, this, [[1, 7]]);
             }));
 
-            function remove(_x4) {
+            function remove(_x5) {
                 return ref.apply(this, arguments);
             }
 
@@ -218,11 +272,11 @@ var PGModel = function () {
     }, {
         key: '__recreate',
         value: function () {
-            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee5() {
+            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee6() {
                 var dropQuery, createColumn, createQuery;
-                return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                return regeneratorRuntime.wrap(function _callee6$(_context6) {
                     while (1) {
-                        switch (_context5.prev = _context5.next) {
+                        switch (_context6.prev = _context6.next) {
                             case 0:
                                 dropQuery = 'drop table if exists ' + this.tableName;
 
@@ -231,22 +285,22 @@ var PGModel = function () {
                                 };
 
                                 createQuery = (0, _stripAdditionalWhitespaces2.default)('create table ' + this.tableName + ' (\n                ' + this.columns.map(createColumn) + '\n            )');
-                                _context5.next = 5;
+                                _context6.next = 5;
                                 return (0, _db2.default)().none(dropQuery);
 
                             case 5:
-                                _context5.next = 7;
+                                _context6.next = 7;
                                 return (0, _db2.default)().none(createQuery);
 
                             case 7:
-                                return _context5.abrupt('return', _context5.sent);
+                                return _context6.abrupt('return', _context6.sent);
 
                             case 8:
                             case 'end':
-                                return _context5.stop();
+                                return _context6.stop();
                         }
                     }
-                }, _callee5, this);
+                }, _callee6, this);
             }));
 
             function __recreate() {
