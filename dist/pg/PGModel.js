@@ -6,10 +6,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _db = require('../db');
-
-var _db2 = _interopRequireDefault(_db);
-
 var _stripAdditionalWhitespaces = require('./stripAdditionalWhitespaces');
 
 var _stripAdditionalWhitespaces2 = _interopRequireDefault(_stripAdditionalWhitespaces);
@@ -23,6 +19,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var PGModel = function () {
     /**
      * {
+     *     db: {PGP Object}
      *     tableName: "users",
      *     columns: [
      *         {name: "id", type: "serial"},
@@ -38,6 +35,7 @@ var PGModel = function () {
     function PGModel(cfg) {
         _classCallCheck(this, PGModel);
 
+        this.db = cfg.db;
         this.tableName = cfg.tableName;
         this.columns = cfg.columns;
     }
@@ -56,7 +54,7 @@ var PGModel = function () {
                                 query = (0, _stripAdditionalWhitespaces2.default)('select * from ' + this.tableName + ' where ' + column + ' = $1');
                                 _context.prev = 1;
                                 _context.next = 4;
-                                return _db2.default.oneOrNone(query, value);
+                                return db.oneOrNone(query, value);
 
                             case 4:
                                 return _context.abrupt('return', _context.sent);
@@ -102,7 +100,7 @@ var PGModel = function () {
                                     return '$/' + column + '/';
                                 }) + '\n                )');
                                 _context2.next = 5;
-                                return _db2.default.none(query, item);
+                                return db.none(query, item);
 
                             case 5:
                                 return _context2.abrupt('return', _context2.sent);
@@ -142,7 +140,7 @@ var PGModel = function () {
                                 query = (0, _stripAdditionalWhitespaces2.default)('update ' + this.tableName + ' set ' + column + ' = ' + value + ' where ' + where.column + ' = $1');
                                 _context3.prev = 1;
                                 _context3.next = 4;
-                                return _db2.default.oneOrNone(query, where.value);
+                                return db.oneOrNone(query, where.value);
 
                             case 4:
                                 return _context3.abrupt('return', _context3.sent);
@@ -185,7 +183,7 @@ var PGModel = function () {
                                 query = 'delete from ' + this.tableName + ' where ' + column + ' = $1';
                                 _context4.prev = 1;
                                 _context4.next = 4;
-                                return _db2.default.none(query, value);
+                                return db.none(query, value);
 
                             case 4:
                                 return _context4.abrupt('return', _context4.sent);
@@ -232,11 +230,11 @@ var PGModel = function () {
 
                                 createQuery = (0, _stripAdditionalWhitespaces2.default)('create table ' + this.tableName + ' (\n                ' + this.columns.map(createColumn) + '\n            )');
                                 _context5.next = 5;
-                                return _db2.default.none(dropQuery);
+                                return db.none(dropQuery);
 
                             case 5:
                                 _context5.next = 7;
-                                return _db2.default.none(createQuery);
+                                return db.none(createQuery);
 
                             case 7:
                                 return _context5.abrupt('return', _context5.sent);
