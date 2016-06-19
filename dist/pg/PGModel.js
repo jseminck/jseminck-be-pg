@@ -129,7 +129,7 @@ var PGModel = function () {
             var value = _ref3.value;
 
             if (value.between) {
-                return 'select * from ' + this.tableName + ' where ' + column + ' between ' + value.between.start + ' and ' + value.between.end;
+                return 'select * from ' + this.tableName + ' where ' + column + ' between "' + value.between.start + '" and "' + value.between.end + '"';
             } else {
                 return 'select * from ' + this.tableName + ' where ' + column + ' = $1';
             }
