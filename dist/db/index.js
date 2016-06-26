@@ -23,15 +23,18 @@ var dbConnection = void 0;
  */
 function db(cn) {
     if (!dbConnection) {
-        // Parse integers so they are not returned as stirng.
-        _pgPromise2.default.pg.types.setTypeParser(1700, function (val) {
-            return parseFloat(val);
-        });
-        _pgPromise2.default.pg.types.setTypeParser(20, function (val) {
-            return parseInt(val);
-        });
-        dbConnection = (0, _pgPromise2.default)()(process.env.DATABASE_URL || cn);
+        var pgpInstance = (0, _pgPromise2.default)();
+
+        parseNumericToNumber(pgpInstance);
+
+        dbConnection = pgpInstance(process.env.DATABASE_URL || cn);
     }
 
     return dbConnection;
+}
+
+function parseNumericToNumber(pgpInstance) {
+    pgpInstance.pg.types.setTypeParser(1700, function (val) {
+        return Number(val);
+    });
 }
