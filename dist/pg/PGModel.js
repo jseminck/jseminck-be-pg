@@ -330,17 +330,22 @@ var PGModel = function () {
                                 };
 
                                 createQuery = (0, _stripAdditionalWhitespaces2.default)('create table ' + this.tableName + ' (\n                ' + this.columns.map(createColumn) + '\n            )');
-                                _context6.next = 5;
+
+
+                                console.log("Dropping table: ", dropQuery);
+                                console.log("Create table", createQuery);
+
+                                _context6.next = 7;
                                 return (0, _db2.default)().none(dropQuery);
 
-                            case 5:
-                                _context6.next = 7;
+                            case 7:
+                                _context6.next = 9;
                                 return (0, _db2.default)().none(createQuery);
 
-                            case 7:
+                            case 9:
                                 return _context6.abrupt('return', _context6.sent);
 
-                            case 8:
+                            case 10:
                             case 'end':
                                 return _context6.stop();
                         }
