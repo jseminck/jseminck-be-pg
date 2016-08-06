@@ -60,6 +60,16 @@ describe("PGModel", function() {
         });
     });
 
+    describe("findAll() without parameters", function() {
+        beforeEach(async function() {
+            await this.model.findAll();
+        });
+
+        it("finds records", function() {
+            expect(this.many).to.have.been.calledWith("select * from users");
+        });
+    });
+
     describe("findAll() between", function() {
         beforeEach(async function() {
             await this.model.findAll({column: "username", value: {between: {start: "a", end: "Z"}}});

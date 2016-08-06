@@ -36,12 +36,20 @@ const UserModel = new PGModel({
 
 The current API is limited, but it allows to:
 
+### findAll
+
+Find all entries
+
+```js
+UserModel.findAll({column: "username", value: "myUserName"})
+```
+
 ### findOne
 
 Find one entry
 
 ```js
-UserModel.findOne({column: "username", value: username});
+UserModel.findOne({column: "username", value: "myUserName"});
 ```
 
 ### update

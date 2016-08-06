@@ -99,7 +99,9 @@ var PGModel = function () {
     }, {
         key: 'findAll',
         value: function () {
-            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref2) {
+            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+                var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
                 var column = _ref2.column;
                 var value = _ref2.value;
                 var query, parsedValue;
@@ -150,7 +152,9 @@ var PGModel = function () {
             var column = _ref3.column;
             var value = _ref3.value;
 
-            if (value.between) {
+            if (!column || !value) {
+                return 'select * from ' + this.tableName;
+            } else if (value.between) {
                 return 'select * from ' + this.tableName + ' where ' + column + ' between $1 and $2';
             } else {
                 return 'select * from ' + this.tableName + ' where ' + column + ' = $1';
@@ -159,7 +163,7 @@ var PGModel = function () {
     }, {
         key: 'getParameters',
         value: function getParameters(value) {
-            if (value.between) {
+            if (!value) return;else if (value.between) {
                 return [value.between.start, value.between.end];
             } else {
                 return value;
@@ -211,7 +215,7 @@ var PGModel = function () {
                 }, _callee3, this, [[3, 9]]);
             }));
 
-            function create(_x3) {
+            function create(_x4) {
                 return ref.apply(this, arguments);
             }
 
@@ -254,7 +258,7 @@ var PGModel = function () {
                 }, _callee4, this, [[2, 8]]);
             }));
 
-            function update(_x4) {
+            function update(_x5) {
                 return ref.apply(this, arguments);
             }
 
@@ -303,7 +307,7 @@ var PGModel = function () {
                 }, _callee5, this, [[2, 8]]);
             }));
 
-            function remove(_x5) {
+            function remove(_x6) {
                 return ref.apply(this, arguments);
             }
 
