@@ -51,12 +51,44 @@ describe("PGModel", function() {
     });
 
     describe("findAll()", function() {
-        beforeEach(async function() {
-            await this.model.findAll({column: "username", value: "myUser"});
+        describe("with only column and value", function() {
+            beforeEach(async function() {
+                await this.model.findAll({column: "username", value: "myUser"});
+            });
+
+            it("finds records", function() {
+                expect(this.many).to.have.been.calledWith("select * from users where username = $1", "myUser");
+            });
         });
 
-        it("finds records", function() {
-            expect(this.many).to.have.been.calledWith("select * from users where username = $1", "myUser");
+        describe("with only column, value and limit", function() {
+            beforeEach(async function() {
+                await this.model.findAll({column: "username", value: "myUser", limit: 10});
+            });
+
+            it("finds records", function() {
+                expect(this.many).to.have.been.calledWith("select * from users where username = $1 limit 10", "myUser");
+            });
+        });
+
+        describe("with only column, value and orderBy", function() {
+            beforeEach(async function() {
+                await this.model.findAll({column: "username", value: "myUser", orderBy: "username desc"});
+            });
+
+            it("finds records", function() {
+                expect(this.many).to.have.been.calledWith("select * from users where username = $1 order by username desc", "myUser");
+            });
+        });
+
+        describe("with only column, value, orderBy and limit", function() {
+            beforeEach(async function() {
+                await this.model.findAll({column: "username", value: "myUser", orderBy: "username desc", limit: 10});
+            });
+
+            it("finds records", function() {
+                expect(this.many).to.have.been.calledWith("select * from users where username = $1 order by username desc limit 10", "myUser");
+            });
         });
     });
 

@@ -104,12 +104,14 @@ var PGModel = function () {
 
                 var column = _ref2.column;
                 var value = _ref2.value;
+                var limit = _ref2.limit;
+                var orderBy = _ref2.orderBy;
                 var query, parsedValue;
                 return regeneratorRuntime.wrap(function _callee2$(_context2) {
                     while (1) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
-                                query = (0, _stripAdditionalWhitespaces2.default)(this.getFindQuery({ column: column, value: value }));
+                                query = (0, _stripAdditionalWhitespaces2.default)(this.getFindQuery({ column: column, value: value, limit: limit, orderBy: orderBy }));
                                 parsedValue = this.getParameters(value);
 
                                 this.printQuery(query, parsedValue);
@@ -151,14 +153,27 @@ var PGModel = function () {
         value: function getFindQuery(_ref3) {
             var column = _ref3.column;
             var value = _ref3.value;
+            var limit = _ref3.limit;
+            var orderBy = _ref3.orderBy;
 
+            var query = void 0;
             if (!column || !value) {
-                return 'select * from ' + this.tableName;
+                query = 'select * from ' + this.tableName;
             } else if (value.between) {
-                return 'select * from ' + this.tableName + ' where ' + column + ' between $1 and $2';
+                query = 'select * from ' + this.tableName + ' where ' + column + ' between $1 and $2';
             } else {
-                return 'select * from ' + this.tableName + ' where ' + column + ' = $1';
+                query = 'select * from ' + this.tableName + ' where ' + column + ' = $1';
             }
+
+            if (orderBy) {
+                query = query + (' order by ' + orderBy);
+            }
+
+            if (limit) {
+                query = query + (' limit ' + limit);
+            }
+
+            return query;
         }
     }, {
         key: 'getParameters',

@@ -7,7 +7,7 @@
     "start": "node dist/index.js",
     "lint": "eslint ./lib/ ./test/",
     "test:dev": "mocha --require test/mocha-babel",
-    "test": "./node_modules/.bin/babel-node node_modules/.bin/babel-istanbul cover node_modules/.bin/_mocha --report lcovonly -- --timeout 3000 --require test/mocha-babel --recursive -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "test": "NODE_ENV=TEST && ./node_modules/.bin/babel-node node_modules/.bin/babel-istanbul cover node_modules/.bin/_mocha --report lcovonly -- --timeout 3000 --require test/mocha-babel --recursive -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "author": "Joachim Seminck <joachim@seminck.be>",
   "license": "MIT",
